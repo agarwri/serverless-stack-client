@@ -4,13 +4,15 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
 import { API } from "aws-amplify";
+import { Auth } from 'aws-amplify';
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
-  const { isAuthenticated } = useAppContext();
+  const [users, setUsers] = useState([]);
+  const { isAuthenticated, userGroups } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function onLoad() {
@@ -20,7 +22,9 @@ export default function Home() {
 
       try {
         const notes = await loadNotes();
+        const users = await loadUsers();
         setNotes(notes);
+        setUsers(users);
       } catch (e) {
         onError(e);
       }
@@ -33,6 +37,10 @@ export default function Home() {
 
   function loadNotes() {
     return API.get("notes", "/notes");
+  }
+
+  function loadUsers() {
+    return API.get("notes", "/users")
   }
 
   function renderNotesList(notes) {
@@ -52,6 +60,17 @@ export default function Home() {
           </ListGroupItem>
         </LinkContainer>
       )
+    );
+  }
+
+
+  function renderUsersList(users) {
+    return users.map((user, i) =>
+        <LinkContainer key={user.Username} to={`/users/${user.Username}`}>
+          <ListGroupItem header={user.Email}>
+            {"Created: " + new Date(user.UserCreateDate).toLocaleString()}
+          </ListGroupItem>
+        </LinkContainer>
     );
   }
 
@@ -83,9 +102,20 @@ export default function Home() {
     );
   }
 
+  function renderUsers() {
+    return (
+      <div className="users">
+        <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Users</h2>
+        <ListGroup>{!isLoading && renderUsersList(users)}</ListGroup>
+      </div>
+    );
+  }
+
+
+
   return (
     <div className="Home">
-      {isAuthenticated ? renderNotes() : renderLander()}
+      {!isAuthenticated ? renderLander() : userGroups.includes("AdminUsers") ? renderUsers() : renderNotes()}
     </div>
   );
 }

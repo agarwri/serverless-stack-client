@@ -8,7 +8,7 @@ import { onError } from "../libs/errorLib";
 import { useFormFields } from "../libs/hooksLib";
 
 export default function Login() {
-  const { userHasAuthenticated } = useAppContext();
+  const { userHasAuthenticated, setUserGroups } = useAppContext();
   const [fields, handleFieldChange] = useFormFields({
     email:"",
     password:""
@@ -25,6 +25,8 @@ export default function Login() {
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
+      let user =  await Auth.currentAuthenticatedUser();
+      setUserGroups(user.signInUserSession.accessToken.payload["cognito:groups"]);
     } catch (e) {
       onError(e);
       setIsLoading(false);

@@ -22,7 +22,7 @@ export default function Signup() {
   });
   const history = useHistory();
   const [newUser, setNewUser] = useState(null);
-  const { userHasAuthenticated } = useAppContext();
+  const { userHasAuthenticated, setUserGroups } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
@@ -63,8 +63,9 @@ export default function Signup() {
     try {
       await Auth.confirmSignUp(fields.email, fields.confirmationCode);
       await Auth.signIn(fields.email, fields.password);
-
       userHasAuthenticated(true);
+      let user =  await Auth.currentAuthenticatedUser();
+      setUserGroups(user.signInUserSession.accessToken.payload["cognito:groups"]);
       history.push("/");
     } catch (e) {
       onError(e);

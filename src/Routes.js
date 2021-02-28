@@ -7,6 +7,7 @@ import NotFound from "./containers/NotFound";
 import NewNote from "./containers/NewNote";
 import Notes from "./containers/Notes";
 import Settings from "./containers/Settings";
+import NotesForUser from "./containers/NotesForUser";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
@@ -30,6 +31,9 @@ export default function Routes() {
       </AuthenticatedRoute>
       <AuthenticatedRoute exact path="/notes/:id">
         <Notes />
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/users/:userPoolUserId">
+        <NotesForUser />
       </AuthenticatedRoute>
       {/* Finally, catch all unmatched routes */}
       <Route>

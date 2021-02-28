@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/browser";
+//import { Integrations } from "@sentry/tracing";
 
 const isLocal = process.env.NODE_ENV === "development";
 
@@ -8,12 +9,12 @@ export function initSentry() {
   }
 
   Sentry.init({
-    dsn: "https://93f0a7d10e194aaaa06fb0728e071e2e@o518208.ingest.sentry.io/5626816",
-    integrations: [new Integrations.BrowserTracing()],
+    dsn: "https://96374e77a72945d2bb1ce3c83262e803@o518218.ingest.sentry.io/5626836"
+    //integrations: [new Integrations.BrowserTracing()],
 
   // We recommend adjusting this value in production, or using tracesSampler
   // for finer control
-    tracesSampleRate: 1.0,
+    //tracesSampleRate: 1.0,
   });
 }
 

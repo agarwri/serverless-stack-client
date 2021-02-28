@@ -13,6 +13,7 @@ function App() {
   const history = useHistory();
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [userGroups, setUserGroups] = useState([]);
 
   useEffect(() => {
   onLoad();
@@ -21,6 +22,8 @@ function App() {
   async function onLoad() {
     try {
       await Auth.currentSession();
+      let user =  await Auth.currentAuthenticatedUser();
+      setUserGroups(user.signInUserSession.accessToken.payload["cognito:groups"]);
       userHasAuthenticated(true);
     }
     catch(e) {
@@ -71,7 +74,7 @@ function App() {
           </Navbar.Collapse>
         </Navbar>
         <ErrorBoundary>
-          <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+          <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated, userGroups, setUserGroups }}>
             <Routes />
           </AppContext.Provider>
         </ErrorBoundary>
