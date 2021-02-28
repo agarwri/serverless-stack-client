@@ -15,24 +15,23 @@ function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [userGroups, setUserGroups] = useState([""]);
 
-  async function onLoad() {
-    try {
-      await Auth.currentSession();
-      let user =  await Auth.currentAuthenticatedUser();
-      setUserGroups(user.signInUserSession.accessToken.payload["cognito:groups"]);
-      userHasAuthenticated(true);
-    }
-    catch(e) {
-      if (e !== 'No current user') {
-        onError(e);
-      }
-    }
-    console.info(userGroups);
-    setIsAuthenticating(false);
-  }
-
   useEffect(() => {
-  onLoad();
+    async function onLoad() {
+      try {
+        await Auth.currentSession();
+        let user =  await Auth.currentAuthenticatedUser();
+        setUserGroups(user.signInUserSession.accessToken.payload["cognito:groups"]);
+        userHasAuthenticated(true);
+      }
+      catch(e) {
+        if (e !== 'No current user') {
+          onError(e);
+        }
+      }
+      console.info(userGroups);
+      setIsAuthenticating(false);
+    }
+    onLoad();
   }, []);
 
 

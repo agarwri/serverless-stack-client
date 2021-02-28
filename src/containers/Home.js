@@ -17,7 +17,6 @@ export default function Home() {
 
   useEffect(() => {
     async function onLoad() {
-      console.info(userGroups);
       if (!isAuthenticated) {
         return;
       }
