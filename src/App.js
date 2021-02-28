@@ -28,7 +28,6 @@ function App() {
           onError(e);
         }
       }
-      console.info(userGroups);
       setIsAuthenticating(false);
     }
     onLoad();
