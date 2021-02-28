@@ -4,7 +4,6 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
 import { API } from "aws-amplify";
-import { Auth } from 'aws-amplify';
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -12,10 +11,13 @@ import { Link } from "react-router-dom";
 export default function Home() {
   const [notes, setNotes] = useState([]);
   const [users, setUsers] = useState([]);
-  const { isAuthenticated, userGroups } = useAppContext();
+  const { isAuthenticated } = useAppContext();
+  const { userGroups } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function onLoad() {
+      console.info(userGroups);
       if (!isAuthenticated) {
         return;
       }

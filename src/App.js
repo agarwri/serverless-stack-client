@@ -13,11 +13,7 @@ function App() {
   const history = useHistory();
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
-  const [userGroups, setUserGroups] = useState([]);
-
-  useEffect(() => {
-  onLoad();
-  }, []);
+  const [userGroups, setUserGroups] = useState([""]);
 
   async function onLoad() {
     try {
@@ -31,9 +27,15 @@ function App() {
         onError(e);
       }
     }
-
+    console.info(userGroups);
     setIsAuthenticating(false);
   }
+
+  useEffect(() => {
+  onLoad();
+  }, []);
+
+
 
   async function handleLogout() {
     await Auth.signOut();
